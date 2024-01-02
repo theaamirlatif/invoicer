@@ -12,7 +12,7 @@ const Profile = () => {
   const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
 
-  var storageURL = 'https://invoicers.000webhostapp.com/storage/app/';
+  var storageURL = 'https://invoicers.000webhostapp.com/data/storage/app/';
 
   // Select relevant data from the Redux store
   const { user, loading, error } = useSelector((state) => state.user);
