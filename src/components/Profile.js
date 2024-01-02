@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../app/misc/authSlice";
 import { NavLink } from "react-router-dom";
 
-const Settings = () => {
+const Profile = () => {
   const dispatch = useDispatch();
   const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
+
+  var storageURL = 'https://invoicers.000webhostapp.com/storage/app/';
 
   // Select relevant data from the Redux store
   const { user, loading, error } = useSelector((state) => state.user);
@@ -106,8 +108,8 @@ const Settings = () => {
                               <div className="col-md-6">
                                 {admin ? (
                                   <img
-                                    src={admin.ucimg}
-                                    alt="profile"
+                                    src= {storageURL + admin.ucimg} //"https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"
+                                    alt="jpg"
                                     style={{
                                       width: "100px",
                                       height: "100px",
@@ -310,4 +312,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Profile;

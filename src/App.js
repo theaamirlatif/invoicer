@@ -11,9 +11,9 @@ import Quotation from "./components/Quotation";
 import Product from "./components/Product";
 import AllProducts from "./components/AllProducts";
 import SignUp from "./components/SignUp"; 
-import Settings from "./components/Settings";
 import Logout from "./components/Logout";
 import Customer from "./components/Customer";
+import Profile from "./components/Profile";
 
 function App () {
 
@@ -31,7 +31,7 @@ function App () {
         <Route path="/AllInvoices" element={<AllInvoices />} />
         <Route path="/AllProducts" element={<AllProducts />} />
         <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Settings" element={<Settings />} />
+        <Route path="/Profile" element={<Profile />} />
         <Route path="/Product/:id" element={<Product />} />
         <Route path="/Error" element={<Error />} />
         <Route path="/test" element={<Test />} />

@@ -49,7 +49,7 @@ const Sidebar = () => {
               {admin && admin.ucimg ? (
                 <img
                   className="rounded-circle"
-                  src={"/storage/app/" + admin.ucimg}
+                  src="https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg" //{"storage/app/" + admin.ucimg}
                   alt="img"
                   style={{ width: "40px", height: "40px" }}
                 />

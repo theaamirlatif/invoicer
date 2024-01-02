@@ -155,7 +155,7 @@ const Navbar = () => {
                 <>
                   <img
                     className="rounded-circle me-lg-2"
-                    src={admin.ucimg} // Assuming admin.ucimg contains the image URL
+                    src="https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"     //{admin.ucimg} // Assuming admin.ucimg contains the image URL
                     alt="img"
                     style={{ width: "40px", height: "40px" }}
                   />
@@ -169,8 +169,8 @@ const Navbar = () => {
               <NavLink to="/#" className="dropdown-item d-none">
                 My Profile
               </NavLink>
-              <NavLink to="/Settings" className="dropdown-item">
-                Settings
+              <NavLink to="/Profile" className="dropdown-item">
+                Profile
               </NavLink>
               <NavLink to="/Logout" className="dropdown-item">
                 Log Out
