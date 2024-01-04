@@ -17,6 +17,7 @@ const InvoiceView = ({
   const [subTotal, setSubTotal] = useState(0);
   const [total, setTotal] = useState(0);
 
+  var storageURL = 'http://localhost:8000/uploads/products/store.png';
   const calculateSubTotalAndTotal = () => {
     let subTotalValue = 0;
 
@@ -64,7 +65,7 @@ const InvoiceView = ({
 
   async function getAdminData() {
     try {
-      const response = await fetch("https://invoicers.000webhostapp.com/api/adminDetails/" + userId); // Updated API endpoint
+      const response = await fetch("http://localhost:8000/api/adminDetails/" + userId); // Updated API endpoint
 
       if (!response.ok) {
         console.error("Error fetching admin data:", response.status);
@@ -104,7 +105,7 @@ const InvoiceView = ({
                 <div className="childTop">
                   <div className="logo">
                     {admin ? (
-                      <img src={admin.ucimg} alt="logo" />
+                      <img src={storageURL} alt="logo" />
                     ) : (
                       <p>Loading...</p>
                     )}

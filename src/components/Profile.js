@@ -12,7 +12,8 @@ const Profile = () => {
   const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
 
-  var storageURL = 'https://invoicers.000webhostapp.com/data/storage/app/';
+  var storageURL = 'http://localhost:8000/uploads/products/store.png';
+  // var storageURL = 'https://invoicers.000webhostapp.com/data/storage/app/';
 
   // Select relevant data from the Redux store
   const { user, loading, error } = useSelector((state) => state.user);
@@ -108,7 +109,7 @@ const Profile = () => {
                               <div className="col-md-6">
                                 {admin ? (
                                   <img
-                                    src= {storageURL + admin.ucimg} //"https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"
+                                    src= {storageURL} //"https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"
                                     alt="jpg"
                                     style={{
                                       width: "100px",

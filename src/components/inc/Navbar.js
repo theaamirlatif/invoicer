@@ -8,6 +8,7 @@ const Navbar = () => {
   const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
 
+  var storageURL = 'http://localhost:8000/uploads/products/store.png';
   // Select relevant data from the Redux store
   const { user, loading, error } = useSelector((state) => state.user);
 
@@ -155,7 +156,7 @@ const Navbar = () => {
                 <>
                   <img
                     className="rounded-circle me-lg-2"
-                    src="https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"     //{admin.ucimg} // Assuming admin.ucimg contains the image URL
+                    src={storageURL} //"https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"     //{admin.ucimg} // Assuming admin.ucimg contains the image URL
                     alt="img"
                     style={{ width: "40px", height: "40px" }}
                   />

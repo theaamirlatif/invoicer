@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const apiURL = "https://invoicers.000webhostapp.com/api";
+const apiURL = "http://localhost:8000/api";
+// const apiURL = "https://invoicers.000webhostapp.com/api";
 const userId = window.sessionStorage.getItem("id");
 
 const apiUrl = `${apiURL}/productList/${userId}`;
