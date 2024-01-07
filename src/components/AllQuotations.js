@@ -2,35 +2,67 @@ import React, { useState, useEffect } from "react";
 import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
+import { quotationList } from "../app/misc/QuotationSlice";
 import { productList } from "../app/misc/ProductSlice";
 
 const AllQuotations = () => {
-  //Products
+  //Quotations
+  const [quotations, setQuotations] = useState([]);
   const [products, setProducts] = useState([]);
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product); // Assuming your product slice is named 'product'
-  const userId = window.sessionStorage.getItem("id");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredQuotationList, setFilteredQuotationList] = useState([]);
 
-  console.log("pro", products);
+  const userId = window.sessionStorage.getItem("id");
+  const dispatch = useDispatch();
+  const { loading, product, quotation } = useSelector((state) => ({
+    product: state.product,
+    quotation: state.quotation,
+  }));
+
+  useEffect(() => {
+    dispatch(quotationList(userId));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(quotationList(userId)).then((result) => {
+      if (result.payload && result.payload.quotations) {
+        setQuotations(result.payload.quotations);
+      }
+    });
+  }, [dispatch, userId]);
+
   useEffect(() => {
     dispatch(productList(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
-    console.log("Component is mounted");
-    console.log("User ID:", userId);
-
     dispatch(productList(userId)).then((result) => {
-      console.log("Product list fetched successfully");
       if (result.payload && result.payload.products) {
         setProducts(result.payload.products);
       }
     });
   }, [dispatch, userId]);
+
+  //search details table
+  useEffect(() => {
+    console.log("product", quotations);
+    const filteredQuotations = quotations.filter((q) => {
+      const searchTermLowerCase = searchTerm.toLowerCase();
+      return (
+        q.id.toString().includes(searchTermLowerCase) ||
+        q.cqname.toLowerCase().includes(searchTermLowerCase) ||
+        q.cqphone.toLowerCase().includes(searchTermLowerCase) ||
+        q.cqaddress.toLowerCase().includes(searchTermLowerCase)
+      );
+    });
+    setFilteredQuotationList(filteredQuotations);
+    console.log("filter", filteredQuotations);
+  }, [quotations, searchTerm]);
 
   const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
@@ -70,18 +102,7 @@ const AllQuotations = () => {
                   <div className="ms-3">
                     <p className="mb-2 fw-bold">Quotations</p>
                     <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
-                    </h6>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6 col-xl-3">
-                <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
-                  <i className="fa fa-chart-bar fa-3x text-body"></i>
-                  <div className="ms-3">
-                    <p className="mb-2 fw-bold">Invoices</p>
-                    <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
+                      {Array.isArray(quotations) && quotations.length}
                     </h6>
                   </div>
                 </div>
@@ -99,11 +120,22 @@ const AllQuotations = () => {
               </div>
               <div className="col-sm-6 col-xl-3">
                 <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
+                  <i className="fa fa-chart-bar fa-3x text-body"></i>
+                  <div className="ms-3">
+                    <p className="mb-2 fw-bold">Invoices</p>
+                    <h6 className="mb-0 text-dark">0
+                      {/* {Array.isArray(quotations) && quotations.length} */}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 col-xl-3">
+                <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
                   <i className="fa fa-chart-pie fa-3x text-body"></i>
                   <div className="ms-3">
                     <p className="mb-2 fw-bold">Sales</p>
-                    <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
+                    <h6 className="mb-0 text-dark">0
+                      {/* {Array.isArray(quotations) && quotations.length} */}
                     </h6>
                   </div>
                 </div>
@@ -123,57 +155,80 @@ const AllQuotations = () => {
                       Add Quotation
                     </NavLink>
                   </div>
+                  <div className="row" style={{ marginBottom: "-10px" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-4">
+                      <h6 className="mb-0"></h6>
+                      <form className="d-none d-md-flex ms-4">
+                        <input
+                          className="form-control border-0"
+                          type="search"
+                          style={{ backgroundColor: "#e3e4ee" }}
+                          placeholder="Search"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </form>
+                    </div>
+                  </div>
                   <div className="table-responsive">
                     <table className="table table-bordered">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Username</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Password</th>
-                          <th scope="col">Country</th>
-                          <th scope="col">Status</th>
+                          <th scope="col">Customer Name</th>
+                          <th scope="col">Customer Phone</th>
+                          <th scope="col">Quotation Date</th>
+                          <th scope="col">Customer Address</th>
+                          <th scope="col">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {user &&
-                          user.map((item) => (
-                            <tr key={item.id}>
-                              <th>{item.id}</th>
-                              <td>{item.username}</td>
-                              <td>{item.email}</td>
-                              <td>{item.password}</td>
-                              <td>Pakistan</td>
-                              <td>{item.ustatus}</td>
-                              <td>{item.created_at}</td>
+                      {filteredQuotationList &&
+                        filteredQuotationList.length > 0 ? (
+                          filteredQuotationList.map((q, index) => (
+                            <tr key={q.id}>
+                              <td>{index + 1}</td>
+                              <td>{q.cqname}</td>
+                              <td>{q.cqphone}</td>
+                              <td>{q.qdate}</td>
+                              <td>{q.cqaddress}</td>
                               <td style={{ display: "flex" }}>
                                 <Link
-                                  to={"/UserEnteries"}
+                                  className="btn btn-outline-info"
+                                  >
+                                    <i className="fa fa-eye"></i>
+                                </Link>
+                                {/* <Link
                                   className="btn btn-outline-success"
                                   style={{
                                     marginRight: "10px",
                                   }}
                                 >
                                   <i className="fa fa-edit"></i>
-                                </Link>
-                                <a className="btn btn-outline-danger">
+                                </Link> */}
+                                {/* <Link
+                                  // onClick={() => delProduct(p.id)}
+                                  className="btn btn-outline-danger"
+                                >
                                   <i className="fa fa-trash"></i>
-                                </a>
+                                </Link> */}
                               </td>
                             </tr>
-                          ))} */}
-                        <tr>
-                          <td
-                            colSpan="6"
-                            style={{ textAlign: "center", fontSize: "25px" }}
-                          >
-                            {loading ? (
-                              "Loading..."
-                            ) : (
-                              <strong>"No Quotations Available!"</strong>
-                            )}
-                          </td>
-                        </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td
+                              colSpan="6"
+                              style={{ textAlign: "center", fontSize: "25px" }}
+                            >
+                              {loading ? (
+                                "Loading..."
+                              ) : (
+                                <strong>"No Quotations Available!"</strong>
+                              )}
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>

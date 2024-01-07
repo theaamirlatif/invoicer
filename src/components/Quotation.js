@@ -13,51 +13,13 @@ import { productList } from "../app/misc/ProductSlice";
 
 const Quotation = () => {
   const navigate = useNavigate();
-  const [clientName, setClientName] = useState("");
-  const [clientCompany, setClientCompany] = useState("");
-  const [clientAddress, setClientAddress] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
-  const [clientDesc, setClientDesc] = useState("");
-  const [btnText, setBtnText] = useState("Add Quotation");
-  const [errors, setErrors] = useState("");
-  const [success, setSuccess] = useState("");
+  const userId = window.sessionStorage.getItem("id");
 
-  const saveQuotation = async () => {
-    setBtnText("Quotation Adding...");
-    const formData = new FormData();
-    formData.append("cqname", clientName);
-    formData.append("cqcomp", clientCompany);
-    formData.append("cqaddress", clientAddress);
-    formData.append("cqphone", clientPhone);
-    formData.append("cqdesc", clientDesc);
-
-    try {
-      const response = await fetch(window.api + "addQuotation", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (result.error) {
-        setErrors("Quotation Model already exists.");
-        setBtnText("Add Quotation");
-      } else {
-        setSuccess("Quotation added successfully!");
-        setClientName("");
-        setClientCompany("");
-        setClientAddress("");
-        setClientPhone("");
-        setClientDesc("");
-        setBtnText("Add Quotation");
-        navigate("/AllQuotations");
-      }
-    } catch (error) {
-      setErrors("Error occurred while adding the product.");
-      setBtnText("Add Quotation");
-    }
-  };
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.product);
 
   const [formData, setFormData] = useState({
+    userId,
     issueDate: "",
     clientName: "",
     clientCompany: "",
@@ -70,11 +32,6 @@ const Quotation = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProductList, setFilteredProductList] = useState([]);
-
-  const userId = window.sessionStorage.getItem("id");
-
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(productList(userId));
@@ -151,6 +108,25 @@ const Quotation = () => {
       setShowSpinner(false);
     }, 500);
   }, [userId]);
+
+  const clearFormData = () => {
+    setFormData({
+      issueDate: "",
+      clientName: "",
+      clientCompany: "",
+      clientAddress: "",
+      clientPhone: "",
+      clientDesc: "",
+    });
+  };
+  
+  const clearProductList = () => {
+    const updatedProductList = products.map((product) => ({
+      ...product,
+      checked: false,
+    }));
+    setProducts(updatedProductList);
+  };
 
   return (
     <>

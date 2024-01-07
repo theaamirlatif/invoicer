@@ -4,6 +4,8 @@ import "../css/style.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { useDispatch } from "react-redux";
+import { addQuotation } from "../../app/misc/QuotationSlice";
 
 const QuotationView = ({
   show,
@@ -14,58 +16,58 @@ const QuotationView = ({
   onRateChange,
   onQtyChange,
 }) => {
-  const handleSaveQuotation = () => {
+  const dispatch = useDispatch();
+  const handleSaveQuotation = async () => {
     const selectedProducts = productList.filter((product) => product.checked);
     const quotationData = {
+      ucid: formData.userId,
       cqname: formData.clientName,
       cqaddress: formData.clientCompany,
       cqphone: formData.clientPhone,
       cqdesc: formData.clientDesc,
-      cqdate: formData.issueDate,
+      qdate: formData.issueDate,
       qproducts: selectedProducts,
     };
+  
+    try {
+      // Dispatch the addQuotation action
+      const resultAction = await dispatch(addQuotation(quotationData));
 
-    // Make an API request to save the quotation
-    fetch(window.api + "addQuotation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(quotationData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Failed to save quotation");
-        }
-      })
-      .then((data) => {
+      // Check if the action was fulfilled successfully
+      if (addQuotation.fulfilled.match(resultAction)) {
+        const data = resultAction.payload;
         console.log("Quotation saved successfully:", data.result);
-        onHide();
-      })
-      .catch((error) => {
+        onHide(); // Close the modal or perform any other action
+      } else {
+        throw new Error("Failed to save quotation");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        // Handle validation errors
+        console.error("Validation errors:", error.response.data.errors);
+      } else {
         console.error("Error saving quotation:", error.message);
-      });
+      }
+    }
 
     //pdf download
-    html2canvas(document.querySelector("#quotationCapture")).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png", 1.0);
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt",
-        format: [612, 792],
-      });
-      pdf.internal.scaleFactor = 1;
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("invoice-001.pdf");
-    });
+    // html2canvas(document.querySelector("#quotationCapture")).then((canvas) => {
+    //   const imgData = canvas.toDataURL("image/png", 1.0);
+    //   const pdf = new jsPDF({
+    //     orientation: "portrait",
+    //     unit: "pt",
+    //     format: [612, 792],
+    //   });
+    //   pdf.internal.scaleFactor = 1;
+    //   const imgProps = pdf.getImageProperties(imgData);
+    //   const pdfWidth = pdf.internal.pageSize.getWidth();
+    //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    //   pdf.save("invoice-001.pdf");
+    // });
   };
 
-  var storageURL = 'http://localhost:8000/uploads/products/store.png';
+  var storageURL = 'http://localhost:8000/storage/app/';
   //pdf download
   const container = React.useRef(null);
   const pdfExportComponent = React.useRef(null);
@@ -129,7 +131,7 @@ const QuotationView = ({
                 <div className="childTop">
                   <div className="logo">
                     {admin ? (
-                      <img src={storageURL} alt="logo" />
+                      <img src={admin.ucimg} alt="logo" />
                     ) : (
                       <p>Loading...</p>
                     )}
@@ -281,7 +283,7 @@ const QuotationView = ({
             Download
           </Button>
           <Button
-            variant="outline-primary d-none"
+            variant="outline-primary"
             style={{ borderRadius: "10px" }}
             onClick={handleSaveQuotation}
           >

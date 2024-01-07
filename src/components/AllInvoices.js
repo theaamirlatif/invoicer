@@ -6,12 +6,17 @@ import { NavLink } from "react-router-dom";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { productList } from "../app/misc/ProductSlice";
+import { quotationList } from "../app/misc/QuotationSlice";
 
 const AllInvoices = () => {
   //Products
   const [products, setProducts] = useState([]);
+  const [quotations, setQuotations] = useState([]);
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product); // Assuming your product slice is named 'product'
+  const { loading, product, quotation } = useSelector((state) => ({
+    product: state.product,
+    quotation: state.quotation,
+  }));
   const userId = window.sessionStorage.getItem("id");
 
   console.log("pro", products);
@@ -20,13 +25,21 @@ const AllInvoices = () => {
   }, [dispatch, userId]);
 
   useEffect(() => {
-    console.log("Component is mounted");
-    console.log("User ID:", userId);
-
     dispatch(productList(userId)).then((result) => {
-      console.log("Product list fetched successfully");
       if (result.payload && result.payload.products) {
         setProducts(result.payload.products);
+      }
+    });
+  }, [dispatch, userId]);
+  
+  useEffect(() => {
+    dispatch(quotationList(userId));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(quotationList(userId)).then((result) => {
+      if (result.payload && result.payload.quotations) {
+        setQuotations(result.payload.quotations);
       }
     });
   }, [dispatch, userId]);
@@ -66,6 +79,17 @@ const AllInvoices = () => {
             <div className="row g-4">
               <div className="col-sm-6 col-xl-3">
                 <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
+                  <i className="fa fa-blog fa-3x text-body"></i>
+                  <div className="ms-3">
+                    <p className="mb-2 fw-bold">Invoices</p>
+                    <h6 className="mb-0 text-dark">0
+                      {/* {Array.isArray(products) && products.length} */}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 col-xl-3">
+                <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
                   <i className="fa fa-user-secret fa-3x text-body"></i>
                   <div className="ms-3">
                     <p className="mb-2 fw-bold">Products</p>
@@ -81,18 +105,7 @@ const AllInvoices = () => {
                   <div className="ms-3">
                     <p className="mb-2 fw-bold">Quotations</p>
                     <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
-                    </h6>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6 col-xl-3">
-                <div className="bg-white rounded d-flex align-items-center justify-content-between p-4">
-                  <i className="fa fa-blog fa-3x text-body"></i>
-                  <div className="ms-3">
-                    <p className="mb-2 fw-bold">Invoices</p>
-                    <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
+                      {Array.isArray(quotations) && quotations.length}
                     </h6>
                   </div>
                 </div>
@@ -102,8 +115,8 @@ const AllInvoices = () => {
                   <i className="fa fa-wind fa-3x text-body"></i>
                   <div className="ms-3">
                     <p className="mb-2 fw-bold">Sales</p>
-                    <h6 className="mb-0 text-dark">
-                      {Array.isArray(products) && products.length}
+                    <h6 className="mb-0 text-dark">0
+                      {/* {Array.isArray(products) && products.length} */}
                     </h6>
                   </div>
                 </div>
