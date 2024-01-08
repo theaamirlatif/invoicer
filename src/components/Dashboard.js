@@ -151,7 +151,7 @@ const Dashboard = () => {
                 <div className="bg-white text-center rounded p-4">
                   <div className="d-flex align-items-center justify-content-between mb-4">
                     <h6 className="mb-0 text-dark">Product Sales</h6>
-                    <a href="/abc">Show All</a>
+                    <NavLink to="" href="/abc" className="text-dark">Show All</NavLink>
                   </div>
                   <canvas id="worldwide-sales"></canvas>
                 </div>
