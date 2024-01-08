@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../app/misc/authSlice";
+import { Helmet } from "react-helmet";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -98,6 +99,12 @@ const SignUp = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>SignUp | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../app/misc/authSlice";
+import { Helmet } from "react-helmet";
 
 const SignIn = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -54,6 +55,12 @@ const SignIn = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>SignIn | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

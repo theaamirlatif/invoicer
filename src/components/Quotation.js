@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { productList } from "../app/misc/ProductSlice";
+import { Helmet } from "react-helmet";
 
 const Quotation = () => {
   const navigate = useNavigate();
@@ -131,6 +132,12 @@ const Quotation = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>Add Quotation | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

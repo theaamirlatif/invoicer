@@ -4,6 +4,7 @@ import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
 import Spinner from "./inc/Spinner";
+import { Helmet } from "react-helmet";
 
 const Customer = () => {
   const userId = window.sessionStorage.getItem("id");
@@ -60,6 +61,12 @@ const Customer = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>Add Customer | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

@@ -7,6 +7,7 @@ import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { productList } from "../app/misc/ProductSlice";
 import { quotationList } from "../app/misc/QuotationSlice";
+import { Helmet } from "react-helmet";
 
 const AllInvoices = () => {
   //Products
@@ -55,6 +56,12 @@ const AllInvoices = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>All Invocies | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

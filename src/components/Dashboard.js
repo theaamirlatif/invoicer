@@ -3,6 +3,7 @@ import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
 import { NavLink, useNavigate } from "react-router-dom";
+import {Helmet} from "react-helmet";
 import Spinner from "./inc/Spinner";
 import { productList } from "../app/misc/ProductSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,6 +68,12 @@ const Dashboard = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>Dashboard | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

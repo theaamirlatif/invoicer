@@ -6,6 +6,7 @@ import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../app/misc/authSlice";
 import { NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,12 @@ const Profile = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>Profile | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

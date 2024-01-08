@@ -112,6 +112,10 @@
     width: 100%;
     margin-left: 0;
   }
+
+  h2.text-dark.mb-0 i{
+    color: #6C7293 !important;
+  }
 }
 
 /*** Navbar ***/
@@ -221,6 +225,10 @@
 @media (max-width: 575.98px) {
   .content .navbar .navbar-nav .nav-link {
     margin-left: 15px;
+  }
+
+  h2.text-dark.mb-0 i{
+    color: #6C7293 !important;
   }
 }
 

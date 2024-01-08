@@ -11,7 +11,7 @@ const Spinner = () => {
           className="spinner-border text-body"
           style={{ width: "3rem", height: "3rem", role: "status" }}
         >
-          <span className="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span><img style={{ width: "2.5rem", height: "2.5rem", role: "status" }} src="/img/favicon-96x96.png" alt="" />
         </div>
       </div>
     </>

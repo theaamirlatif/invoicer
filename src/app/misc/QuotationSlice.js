@@ -3,8 +3,8 @@ import axios from "axios";
 
 const apiURL = "http://localhost:8000/api";
 
-//add product
-export const addQuotation = createAsyncThunk(
+  //add product
+  export const addQuotation = createAsyncThunk(
     "quotation/addQuotation",
     async (formData) => {
       const formDatas = JSON.stringify(formData);

@@ -17,6 +17,7 @@ const QuotationView = ({
   onQtyChange,
 }) => {
   const dispatch = useDispatch();
+  const userId = window.sessionStorage.getItem("id");
   const handleSaveQuotation = async () => {
     const selectedProducts = productList.filter((product) => product.checked);
     const quotationData = {
@@ -86,7 +87,6 @@ const QuotationView = ({
   };
 
   // Admin details
-  const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
 
   async function getAdminData() {

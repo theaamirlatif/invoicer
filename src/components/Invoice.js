@@ -7,6 +7,7 @@ import InvoiceView from "./inc/InvoiceView";
 import Spinner from "./inc/Spinner";
 import { productList } from "../app/misc/ProductSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
 const Invoice = () => {
   const navigate = useNavigate();
@@ -152,6 +153,12 @@ const Invoice = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>Add Invoice | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>

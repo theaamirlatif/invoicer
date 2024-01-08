@@ -8,6 +8,7 @@ import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { quotationList } from "../app/misc/QuotationSlice";
 import { productList } from "../app/misc/ProductSlice";
+import { Helmet } from "react-helmet";
 
 const AllQuotations = () => {
   //Quotations
@@ -75,6 +76,12 @@ const AllQuotations = () => {
   return (
     <>
       <div className="container-fluid position-relative d-flex p-0">
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>All Quotations | Invoicer</title>
+              <link rel="canonical" href="http://mysite.com/example" />
+              <meta name="description" content="Dashboard Invoicer" />
+          </Helmet>
         {/* <!-- Spinner Start --> */}
         {showSpinner && (
           <>
@@ -177,8 +184,8 @@ const AllQuotations = () => {
                           <th scope="col">#</th>
                           <th scope="col">Customer Name</th>
                           <th scope="col">Customer Phone</th>
-                          <th scope="col">Quotation Date</th>
                           <th scope="col">Customer Address</th>
+                          <th scope="col">Quotation Date</th>
                           <th scope="col">Actions</th>
                         </tr>
                       </thead>
@@ -190,8 +197,8 @@ const AllQuotations = () => {
                               <td>{index + 1}</td>
                               <td>{q.cqname}</td>
                               <td>{q.cqphone}</td>
-                              <td>{q.qdate}</td>
                               <td>{q.cqaddress}</td>
+                              <td>{q.qdate}</td>
                               <td style={{ display: "flex" }}>
                                 <Link
                                   className="btn btn-outline-info"

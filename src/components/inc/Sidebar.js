@@ -41,7 +41,13 @@ const Sidebar = () => {
           {/* <NavLink to="/Dashboard"> */}
           <NavLink className="navbar-brand mx-4 mb-3">
             <h3 className="text-body">
-              <i className="fa fa-user-edit me-2"></i>Invoicer
+              <i className="fa fa-user-edit me-2"></i>
+              {/* <img
+                className="rounded-circle"
+                src="/img/favicon-32x32.png"
+                alt=""
+              /> */}
+                Invoicer
             </h3>
           </NavLink>
           {/* </NavLink> */}
@@ -85,8 +91,7 @@ const Sidebar = () => {
               </NavLink>
               <div className="dropdown-menu bg-transparent border-0">
                 <NavLink to="/Product" className="dropdown-item">
-                  <i className="far fa-circle me-2 text-dark"></i>Add New
-                  Product
+                  <i className="far fa-circle me-2 text-dark"></i>Add New Product
                 </NavLink>
                 <NavLink to="/Customer" className="dropdown-item" style={{display: "none"}}>
                   <i className="far fa-circle me-2 text-dark"></i>New Customer
