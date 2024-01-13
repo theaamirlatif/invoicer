@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   var storageURL = 'http://localhost:8000/uploads/products/store.png';
   // Select relevant data from the Redux store
-  const { user, loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +62,11 @@ const Sidebar = () => {
                 />
               ) : (
                 <p>Loading...</p>
+              )}
+              {loading ? (
+                 <></>
+                ) : (
+                <strong><></></strong>
               )}
               <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
             </div>

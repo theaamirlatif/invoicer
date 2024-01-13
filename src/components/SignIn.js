@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ const SignIn = () => {
     if (window.sessionStorage.getItem("id")) {
       navigate("/Dashboard");
     }
-  }, []);
+  }, [navigate]);
 
   const { loading, error } = useSelector((state) => state.user);
 
@@ -79,11 +79,11 @@ const SignIn = () => {
             <div className="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
               <div className="bg-white rounded p-4 p-sm-5 my-4 mx-3">
                 <div className="d-flex align-items-center justify-content-between mb-3">
-                  <a className="">
+                  <Link className="">
                     <h3 className="text-body">
                       <i className="fa fa-user-edit me-2"></i>INVOICER
                     </h3>
-                  </a>
+                  </Link>
                   <h3 className="text-dark">Sign In</h3>
                 </div>
                 {error && (

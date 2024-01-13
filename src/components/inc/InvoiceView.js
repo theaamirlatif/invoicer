@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Table } from "react-bootstrap";
 import "../css/style.css";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 
 const InvoiceView = ({
@@ -18,29 +16,30 @@ const InvoiceView = ({
   const [total, setTotal] = useState(0);
 
   var storageURL = 'http://localhost:8000/uploads/products/store.png';
-  const calculateSubTotalAndTotal = () => {
-    let subTotalValue = 0;
-
-    productList
-      .filter((product) => product.checked)
-      .forEach((product, index) => {
-        const rate = parseFloat(product.prate) || 0;
-        const qty = parseFloat(product.pqty) || 0;
-        const amount = rate * qty;
-
-        onRateChange(index, rate);
-        onQtyChange(index, qty);
-
-        subTotalValue += amount;
-      });
-
-    setSubTotal(subTotalValue.toFixed(2));
-    setTotal(subTotalValue.toFixed(2));
-  };
-
   useEffect(() => {
+    const calculateSubTotalAndTotal = () => {
+      let subTotalValue = 0;
+
+      productList
+        .filter((product) => product.checked)
+        .forEach((product, index) => {
+          const rate = parseFloat(product.prate) || 0;
+          const qty = parseFloat(product.pqty) || 0;
+          const amount = rate * qty;
+
+          // Assuming onRateChange and onQtyChange are available in your component
+          onRateChange(index, rate);
+          onQtyChange(index, qty);
+
+          subTotalValue += amount;
+        });
+
+      setSubTotal(subTotalValue.toFixed(2));
+      setTotal(subTotalValue.toFixed(2));
+    };
+
     calculateSubTotalAndTotal();
-  }, [productList]);
+  }, [productList, onQtyChange, onRateChange]);
 
   //pdf download
   const container = React.useRef(null);
@@ -56,6 +55,7 @@ const InvoiceView = ({
   const exportPDFWithComponent = () => {
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save();
+      exportPDFWithMethod();
     }
   };
 
@@ -63,25 +63,26 @@ const InvoiceView = ({
   const userId = window.sessionStorage.getItem("id");
   const [admin, setAdmin] = useState(null);
 
-  async function getAdminData() {
-    try {
-      const response = await fetch("http://localhost:8000/api/adminDetails/" + userId); // Updated API endpoint
-
-      if (!response.ok) {
-        console.error("Error fetching admin data:", response.status);
-        return;
-      }
-
-      const data = await response.json();
-      console.log("data....", data);
-      setAdmin(data);
-    } catch (error) {
-      console.error("Error fetching admin data:", error);
-    }
-  }
-
   useEffect(() => {
-    getAdminData();
+    const fetchAdminData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/adminDetails/${userId}`, {
+          method: "GET"
+        });
+  
+        if (!response.ok) {
+          console.error("Error fetching admin data:", response.status);
+          return;
+        }
+  
+        const data = await response.json();
+        setAdmin(data);
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
+      }
+    };
+  
+    fetchAdminData();
   }, [userId]);
 
   return (

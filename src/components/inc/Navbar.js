@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { fetchUserData } from "../../app/misc/authSlice";
 
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   var storageURL = 'http://localhost:8000/uploads/products/store.png';
   // Select relevant data from the Redux store
-  const { user, loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,9 +39,9 @@ const Navbar = () => {
             <i className="fa fa-user-edit"></i>
           </h2>
         </a>
-        <a className="sidebar-toggler text-dark  flex-shrink-0">
+        <Link className="sidebar-toggler text-dark  flex-shrink-0">
           <i className="fa fa-bars"></i>
-        </a>
+        </Link>
         {/* <form className="d-none d-md-flex ms-4">
           <input
             className="form-control bg-white border"
@@ -49,6 +49,11 @@ const Navbar = () => {
             placeholder="Search"
           />
         </form> */}
+        {loading ? (
+            <></>
+            ) : (
+           <strong><></></strong>
+        )}
         <div className="navbar-nav align-items-center ms-auto">
           <div className="nav-item dropdown" style={{ display: "none" }}>
             <a

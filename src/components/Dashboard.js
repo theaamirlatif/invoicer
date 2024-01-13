@@ -13,6 +13,15 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [quotations, setQuotations] = useState([]);
+  const userId = window.sessionStorage.getItem("id");
+
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => ({
+    product: state.product,
+    quotation: state.quotation,
+  }));
+
+  //fuctions and actions
   useEffect(() => {
     window.scrollTo(0, 0);
     if (window.sessionStorage.getItem("id")) {
@@ -20,39 +29,24 @@ const Dashboard = () => {
     } else {
       navigate("/");
     }
-  }, []);
-
-  const dispatch = useDispatch();
-  const { product, quotation } = useSelector((state) => ({
-    product: state.product,
-    quotation: state.quotation,
-  }));
-  const userId = window.sessionStorage.getItem("id");
+  }, [navigate]);
 
   useEffect(() => {
+    dispatch(quotationList(userId));
     dispatch(productList(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
-    console.log("Component is mounted");
-    console.log("User ID:", userId);
-
-    dispatch(productList(userId)).then((result) => {
-      console.log("Product list fetched successfully");
-      if (result.payload && result.payload.products) {
-        setProducts(result.payload.products);
-      }
-    });
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    dispatch(quotationList(userId));
-  }, [dispatch, userId]);
-
-  useEffect(() => {
+    //fetch quotationList details
     dispatch(quotationList(userId)).then((result) => {
       if (result.payload && result.payload.quotations) {
         setQuotations(result.payload.quotations);
+      }
+    });
+    //fetch productList details
+    dispatch(productList(userId)).then((result) => {
+      if (result.payload && result.payload.products) {
+        setProducts(result.payload.products);
       }
     });
   }, [dispatch, userId]);
@@ -103,6 +97,11 @@ const Dashboard = () => {
                     <p className="mb-2 fw-bold">Products</p>
                     <h6 className="mb-0 text-dark">
                       {Array.isArray(products) && products.length}
+                      {loading ? (
+                        <></>
+                        ) : (
+                        <strong><></></strong>
+                      )}
                     </h6>
                   </div>
                 </div>

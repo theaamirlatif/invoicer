@@ -17,7 +17,7 @@ const Profile = () => {
   // var storageURL = 'https://invoicers.000webhostapp.com/data/storage/app/';
 
   // Select relevant data from the Redux store
-  const { user, loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +129,11 @@ const Profile = () => {
                                 ) : (
                                   <>loading...</>
                                 )}
+                                {loading ? (
+                                    <></>
+                                    ) : (
+                                    <strong><></></strong>
+                                  )}
                               </div>
                             </div>
                           </div>

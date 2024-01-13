@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Table } from "react-bootstrap";
 import "../css/style.css";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
 import { useDispatch } from "react-redux";
 import { addQuotation } from "../../app/misc/QuotationSlice";
@@ -23,7 +21,8 @@ const QuotationView = ({
     const quotationData = {
       ucid: formData.userId,
       cqname: formData.clientName,
-      cqaddress: formData.clientCompany,
+      cqcname: formData.clientCompany,
+      cqaddress: formData.clientAddress,
       cqphone: formData.clientPhone,
       cqdesc: formData.clientDesc,
       qdate: formData.issueDate,
@@ -68,7 +67,6 @@ const QuotationView = ({
     // });
   };
 
-  var storageURL = 'http://localhost:8000/storage/app/';
   //pdf download
   const container = React.useRef(null);
   const pdfExportComponent = React.useRef(null);
@@ -83,31 +81,33 @@ const QuotationView = ({
   const exportPDFWithComponent = () => {
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save();
+      exportPDFWithMethod();
     }
   };
 
   // Admin details
   const [admin, setAdmin] = useState(null);
 
-  async function getAdminData() {
-    try {
-      const response = await fetch("http://localhost:8000/api/adminDetails/" + userId); // Updated API endpoint
-
-      if (!response.ok) {
-        console.error("Error fetching admin data:", response.status);
-        return;
-      }
-
-      const data = await response.json();
-      console.log("data....", data);
-      setAdmin(data);
-    } catch (error) {
-      console.error("Error fetching admin data:", error);
-    }
-  }
-
   useEffect(() => {
-    getAdminData();
+    const fetchAdminData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/adminDetails/${userId}`, {
+          method: "GET"
+        });
+  
+        if (!response.ok) {
+          console.error("Error fetching admin data:", response.status);
+          return;
+        }
+  
+        const data = await response.json();
+        setAdmin(data);
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
+      }
+    };
+  
+    fetchAdminData();
   }, [userId]);
 
   return (
