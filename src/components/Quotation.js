@@ -3,8 +3,7 @@ import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
 import QuotationView from "./inc/QuotationView";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./inc/Spinner";
@@ -13,11 +12,10 @@ import { productList } from "../app/misc/ProductSlice";
 import { Helmet } from "react-helmet";
 
 const Quotation = () => {
-  const navigate = useNavigate();
   const userId = window.sessionStorage.getItem("id");
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product);
+  const { loading } = useSelector((state) => state.product);
 
   const [formData, setFormData] = useState({
     userId,
@@ -109,25 +107,6 @@ const Quotation = () => {
       setShowSpinner(false);
     }, 500);
   }, [userId]);
-
-  const clearFormData = () => {
-    setFormData({
-      issueDate: "",
-      clientName: "",
-      clientCompany: "",
-      clientAddress: "",
-      clientPhone: "",
-      clientDesc: "",
-    });
-  };
-  
-  const clearProductList = () => {
-    const updatedProductList = products.map((product) => ({
-      ...product,
-      checked: false,
-    }));
-    setProducts(updatedProductList);
-  };
 
   return (
     <>

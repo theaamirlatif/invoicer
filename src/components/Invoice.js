@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import InvoiceView from "./inc/InvoiceView";
 import Spinner from "./inc/Spinner";
 import { productList } from "../app/misc/ProductSlice";
@@ -10,50 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 
 const Invoice = () => {
-  const navigate = useNavigate();
-  const [clientName, setClientName] = useState("");
-  const [clientCompany, setClientCompany] = useState("");
-  const [clientAddress, setClientAddress] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
-  const [clientDesc, setClientDesc] = useState("");
-  const [btnText, setBtnText] = useState("Add Invoice");
-  const [errors, setErrors] = useState("");
-  const [success, setSuccess] = useState("");
-
-  const saveInvoice = async () => {
-    setBtnText("Invoice Adding...");
-    const formData = new FormData();
-    formData.append("cqname", clientName);
-    formData.append("cqcomp", clientCompany);
-    formData.append("cqaddress", clientAddress);
-    formData.append("cqphone", clientPhone);
-    formData.append("cqdesc", clientDesc);
-
-    try {
-      const response = await fetch(window.api + "addInvoice", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (result.error) {
-        setErrors("Invoice Model already exists.");
-        setBtnText("Add Invoice");
-      } else {
-        setSuccess("Invoice added successfully!");
-        setClientName("");
-        setClientCompany("");
-        setClientAddress("");
-        setClientPhone("");
-        setClientDesc("");
-        setBtnText("Add Invoice");
-        navigate("/AllInvoices");
-      }
-    } catch (error) {
-      setErrors("Error occurred while adding the product.");
-      setBtnText("Add Invoice");
-    }
-  };
 
   const [formData, setFormData] = useState({
     issueDate: "",
@@ -72,7 +28,7 @@ const Invoice = () => {
   const userId = window.sessionStorage.getItem("id");
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product);
+  const { loading } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(productList(userId));

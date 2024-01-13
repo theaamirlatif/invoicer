@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
-import { useNavigate, Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,43 +14,37 @@ function AllProducts() {
   //Products
   const [products, setProducts] = useState([]);
   const [quotations, setQuotations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const userId = window.sessionStorage.getItem("id");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProductList, setFilteredProductList] = useState([]);
+  const [showSpinner, setShowSpinner] = useState(false);
+
+  //store dispatching
   const dispatch = useDispatch();
-  const { loading, product, quotation } = useSelector((state) => ({
+  const { loading } = useSelector((state) => ({
     product: state.product,
     quotation: state.quotation,
   }));
 
   useEffect(() => {
+    dispatch(quotationList(userId));
     dispatch(productList(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
-    dispatch(productList(userId)).then((result) => {
-      if (result.payload && result.payload.products) {
-        setProducts(result.payload.products);
-      }
-    });
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    dispatch(quotationList(userId));
-  }, [dispatch, userId]);
-
-  useEffect(() => {
+    //fetch quotationList details
     dispatch(quotationList(userId)).then((result) => {
       if (result.payload && result.payload.quotations) {
         setQuotations(result.payload.quotations);
       }
     });
-  }, [dispatch, userId]);
-
-  //search details table
-  useEffect(() => {
-    console.log("product", products);
+    //fetch productList details
+    dispatch(productList(userId)).then((result) => {
+      if (result.payload && result.payload.products) {
+        setProducts(result.payload.products);
+      }
+    });
+    //search details table
     const filteredProducts = products.filter((p) => {
       const searchTermLowerCase = searchTerm.toLowerCase();
       return (
@@ -61,10 +55,8 @@ function AllProducts() {
       );
     });
     setFilteredProductList(filteredProducts);
-    console.log("filter", filteredProducts);
-  }, [products, searchTerm]);
+  }, [dispatch, userId, products, searchTerm]);
 
-  const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
     setShowSpinner(true);
     setTimeout(() => {
@@ -166,7 +158,7 @@ function AllProducts() {
                   </div>
                   <div className="row" style={{ marginBottom: "-10px" }}>
                     <div className="d-flex align-items-center justify-content-between mb-4">
-                      <h6 className="mb-0"></h6>
+                      <div className="mb-0"></div>
                       <form className="d-none d-md-flex ms-4">
                         <input
                           className="form-control border-0"

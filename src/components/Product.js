@@ -2,15 +2,13 @@ import { useState, useEffect } from "react";
 import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
-import { useNavigate, Link, NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, productList } from "../app/misc/ProductSlice";
 import { Helmet } from "react-helmet";
 
 const Product = () => {
-  const navigate = useNavigate();
-
   const [id, setId] = useState(null);
   const [pimg, setPimg] = useState("");
   const [pname, setPname] = useState("");
@@ -26,7 +24,7 @@ const Product = () => {
 
   const userId = window.sessionStorage.getItem("id");
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.product);
+  const { loading } = useSelector((state) => state.product);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -165,7 +163,7 @@ const Product = () => {
                     </div>
                     {alertMessage && (
                       <div className="alert alert-danger" role="alert">
-                        {alertMessage}
+                        {alertMessage}{id}
                       </div>
                     )}
                   </div>
