@@ -2,70 +2,63 @@ import React, { useState, useEffect } from "react";
 import Footer from "./inc/Footer";
 import Navbar from "./inc/Navbar";
 import Sidebar from "./inc/Sidebar";
-import { useNavigate, NavLink, Link } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { NavLink, Link } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Spinner from "./inc/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { quotationList } from "../app/misc/QuotationSlice";
 import { productList } from "../app/misc/ProductSlice";
 import { Helmet } from "react-helmet";
+import ViewQuotation from "./inc/ViewQuotation";
 
 const AllQuotations = () => {
   //Quotations
   const [quotations, setQuotations] = useState([]);
   const [products, setProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredQuotationList, setFilteredQuotationList] = useState([]);
+  const [showQuotationModal, setShowQuotationModal] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const userId = window.sessionStorage.getItem("id");
   const dispatch = useDispatch();
-  const { loading, product, quotation } = useSelector((state) => ({
+  const { loading } = useSelector((state) => ({
     product: state.product,
     quotation: state.quotation,
   }));
 
   useEffect(() => {
     dispatch(quotationList(userId));
+    dispatch(productList(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
+    //fetch quotationList details
     dispatch(quotationList(userId)).then((result) => {
       if (result.payload && result.payload.quotations) {
         setQuotations(result.payload.quotations);
       }
     });
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    dispatch(productList(userId));
-  }, [dispatch, userId]);
-
-  useEffect(() => {
+    //fetch productList details
     dispatch(productList(userId)).then((result) => {
       if (result.payload && result.payload.products) {
         setProducts(result.payload.products);
       }
     });
-  }, [dispatch, userId]);
-
-  //search details table
-  useEffect(() => {
-    console.log("product", quotations);
+    //search details table
     const filteredQuotations = quotations.filter((q) => {
       const searchTermLowerCase = searchTerm.toLowerCase();
       return (
         q.id.toString().includes(searchTermLowerCase) ||
         q.cqname.toLowerCase().includes(searchTermLowerCase) ||
+        q.cqcname.toLowerCase().includes(searchTermLowerCase) ||
         q.cqphone.toLowerCase().includes(searchTermLowerCase) ||
         q.cqaddress.toLowerCase().includes(searchTermLowerCase)
       );
     });
     setFilteredQuotationList(filteredQuotations);
-    console.log("filter", filteredQuotations);
-  }, [quotations, searchTerm]);
+  }, [dispatch, userId, quotations, searchTerm]);
 
-  const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
     setShowSpinner(true);
     setTimeout(() => {
@@ -164,7 +157,7 @@ const AllQuotations = () => {
                   </div>
                   <div className="row" style={{ marginBottom: "-10px" }}>
                     <div className="d-flex align-items-center justify-content-between mb-4">
-                      <h6 className="mb-0"></h6>
+                      <div className="mb-0"></div>
                       <form className="d-none d-md-flex ms-4">
                         <input
                           className="form-control border-0"
@@ -183,6 +176,7 @@ const AllQuotations = () => {
                         <tr>
                           <th scope="col">#</th>
                           <th scope="col">Customer Name</th>
+                          <th scope="col">Compnay Name</th>
                           <th scope="col">Customer Phone</th>
                           <th scope="col">Customer Address</th>
                           <th scope="col">Quotation Date</th>
@@ -196,15 +190,23 @@ const AllQuotations = () => {
                             <tr key={q.id}>
                               <td>{index + 1}</td>
                               <td>{q.cqname}</td>
+                              <td>{q.cqcname}</td>
                               <td>{q.cqphone}</td>
                               <td>{q.cqaddress}</td>
                               <td>{q.qdate}</td>
                               <td style={{ display: "flex" }}>
                                 <Link
                                   className="btn btn-outline-info"
+                                  onClick={() => setShowQuotationModal(true, q)}
                                   >
                                     <i className="fa fa-eye"></i>
                                 </Link>
+                                <ViewQuotation
+                                  show={showQuotationModal}
+                                  onHide={() => setShowQuotationModal(false)}
+                                  mainId={userId}
+                                  selectedQuotation={quotations}
+                                />
                                 {/* <Link
                                   className="btn btn-outline-success"
                                   style={{

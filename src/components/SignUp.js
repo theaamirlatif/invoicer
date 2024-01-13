@@ -14,7 +14,7 @@ const SignUp = () => {
     if (window.sessionStorage.getItem("id")) {
       navigate("/Dashboard");
     }
-  }, []);
+  }, [navigate]);
 
   const [isChecked, setIsChecked] = useState(false);
   const [uname, setUsername] = useState("");

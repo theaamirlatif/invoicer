@@ -10,42 +10,40 @@ import { quotationList } from "../app/misc/QuotationSlice";
 import { Helmet } from "react-helmet";
 
 const AllInvoices = () => {
-  //Products
+  //initializations
   const [products, setProducts] = useState([]);
   const [quotations, setQuotations] = useState([]);
+  const userId = window.sessionStorage.getItem("id");
+  const [showSpinner, setShowSpinner] = useState(false);
+  
+  //store dispatching
   const dispatch = useDispatch();
-  const { loading, product, quotation } = useSelector((state) => ({
+  const { loading } = useSelector((state) => ({
     product: state.product,
     quotation: state.quotation,
   }));
-  const userId = window.sessionStorage.getItem("id");
 
-  console.log("pro", products);
+  //actions or functions
   useEffect(() => {
+    dispatch(quotationList(userId));
     dispatch(productList(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {
+    //fetch quotationList details
+    dispatch(quotationList(userId)).then((result) => {
+      if (result.payload && result.payload.quotations) {
+        setQuotations(result.payload.quotations);
+      }
+    });
+    //fetch productList details
     dispatch(productList(userId)).then((result) => {
       if (result.payload && result.payload.products) {
         setProducts(result.payload.products);
       }
     });
   }, [dispatch, userId]);
-  
-  useEffect(() => {
-    dispatch(quotationList(userId));
-  }, [dispatch, userId]);
 
-  useEffect(() => {
-    dispatch(quotationList(userId)).then((result) => {
-      if (result.payload && result.payload.quotations) {
-        setQuotations(result.payload.quotations);
-      }
-    });
-  }, [dispatch, userId]);
-
-  const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
     setShowSpinner(true);
     setTimeout(() => {
